@@ -1,10 +1,11 @@
+import { format } from "date-fns";
 import type { Transaction } from "./types";
 
 // Format currency with 2 decimal places
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "INR",
   }).format(amount);
 };
 
@@ -29,4 +30,12 @@ export const calculateTotalIncome = (transactions: Transaction[]): number => {
   return transactions
     .filter((t) => !t.isExpense)
     .reduce((total, transaction) => total + transaction.amount, 0);
+};
+
+// Format date in a readable format
+export const formatDate = (date: Date): string => {
+  if (typeof date === "string") {
+    date = new Date(date);
+  }
+  return format(date, "MMM dd, yyyy");
 };
