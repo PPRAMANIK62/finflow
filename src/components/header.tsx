@@ -8,7 +8,7 @@ import {
   formatCurrency,
 } from "@/lib/helpers";
 import { ArrowDownCircle, ArrowUpCircle, DollarSign } from "lucide-react";
-import { ModeToggle } from "./mode-toggle";
+// import { ModeToggle } from "./mode-toggle";
 import { Card, CardContent } from "./ui/card";
 
 const Header = () => {
@@ -22,7 +22,7 @@ const Header = () => {
     <div className="mb-8 w-full">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Personal Finance Tracker</h1>
-        <ModeToggle />
+        {/* <ModeToggle /> */}
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
