@@ -67,11 +67,7 @@ const TransactionForm = ({ onComplete }: Props) => {
         ? new Date(currentEditTransaction.date)
         : new Date(),
       isExpense: currentEditTransaction?.isExpense ?? true,
-      category:
-        currentEditTransaction?.category ??
-        (currentEditTransaction?.isExpense
-          ? EXPENSE_CATEGORIES[0]
-          : INCOME_CATEGORIES[0]),
+      category: currentEditTransaction?.category ?? "",
     },
   });
 
