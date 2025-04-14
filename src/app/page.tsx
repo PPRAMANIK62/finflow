@@ -1,12 +1,12 @@
 "use client";
 
+import BudgetManager from "@/components/budget/budget-manager";
 import CategoryBreakdown from "@/components/category/category-breakdown";
 import CategoryPieChart from "@/components/category/category-pie-chart";
 import ExpensesChart from "@/components/expenses/expenses-chart";
 import Header from "@/components/header";
 import AddTransaction from "@/components/transaction/add-transaction";
 import RecentTransactions from "@/components/transaction/recent-transactions";
-import TransactionForm from "@/components/transaction/transaction-form";
 import TransactionList from "@/components/transaction/transaction-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TransactionProvider } from "@/contexts/transaction-context";
@@ -55,7 +55,7 @@ export default function HomePage() {
 
             <TabsContent value="budgets">
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {/* <BudgetManager /> */}
+                <BudgetManager />
                 {/* <SpendingInsights /> */}
               </div>
 
