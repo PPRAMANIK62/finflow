@@ -33,41 +33,40 @@ export const useTransactions = () => {
 export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Initialize with some sample data including categories
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    // Check if we have transactions in localStorage
-    const savedTransactions = localStorage.getItem("transactions");
-    return savedTransactions
-      ? (JSON.parse(savedTransactions) as Transaction[])
-      : [];
-  });
-
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [budgets, setBudgets] = useState<Record<string, number>>({});
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [currentEditTransaction, setCurrentEditTransaction] =
     useState<Transaction | null>(null);
 
-  const [budgets, setBudgets] = useState<Record<string, number>>(() => {
-    // Load budgets from localStorage or set defaults
+  // Load data from localStorage on mount
+  useEffect(() => {
+    const savedTransactions = localStorage.getItem("transactions");
     const savedBudgets = localStorage.getItem("budgets");
-    return savedBudgets
-      ? (JSON.parse(savedBudgets) as Record<string, number>)
-      : {};
-  });
 
-  // Save transactions to localStorage whenever they change
+    if (savedTransactions) {
+      setTransactions(JSON.parse(savedTransactions) as Transaction[]);
+    }
+
+    if (savedBudgets) {
+      setBudgets(JSON.parse(savedBudgets) as Record<string, number>);
+    }
+  }, []);
+
+  // Save transactions to localStorage
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
 
-  // Save budgets to localStorage whenever they change
+  // Save budgets to localStorage
   useEffect(() => {
     localStorage.setItem("budgets", JSON.stringify(budgets));
   }, [budgets]);
 
-  // Update currentEditTransaction whenever isEditing changes
+  // Update currentEditTransaction
   useEffect(() => {
     if (isEditing) {
-      const transaction = transactions?.find((t) => t.id === isEditing) ?? null;
+      const transaction = transactions.find((t) => t.id === isEditing) ?? null;
       setCurrentEditTransaction(transaction);
     } else {
       setCurrentEditTransaction(null);
@@ -93,10 +92,10 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const setBudget = (category: string, amount: number) => {
-    setBudgets({
-      ...budgets,
+    setBudgets((prev) => ({
+      ...prev,
       [category]: amount,
-    });
+    }));
   };
 
   return (
