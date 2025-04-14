@@ -1,29 +1,71 @@
-# Create T3 App
+# Personal Finance Tracker
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A modern web application for tracking personal income and expenses, built with Next.js, TypeScript, and Tailwind CSS.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- 💰 Track income and expenses with categories
+- 📊 Detailed analytics and reports
+- 📱 Responsive design for all devices
+- 📅 Transaction history with filtering and search
+- 📈 Visual data representation with charts
+- 🔄 Real-time balance calculations
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Framework:** Next.js
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Icons:** Lucide Icons
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+1. Clone the repository:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```bash
+git clone https://github.com/yourusername/finflow.git
+cd finflow
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+2. Install dependencies:
 
-## How do I deploy this?
+```bash
+npm install
+# or
+bun install
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+3. Run the development server:
+
+```bash
+npm run dev
+# or
+bun dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## Project Structure
+
+```
+finflow/
+├── public/             # Static assets
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── contexts/       # React context providers
+│   ├── lib/            # Utility functions and configs
+│   ├── hooks/          # Custom React hooks
+│   ├── providers/      # Providers
+│   ├── types/          # TypeScript types/interfaces
+│   └── app/            # Next.js app router files
+└── package.json        # Project dependencies
+```
+
+## Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
