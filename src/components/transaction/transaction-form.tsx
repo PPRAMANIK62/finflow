@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -47,7 +46,11 @@ const transactionSchema = z.object({
   category: z.string().min(1, "Please select a category"),
 });
 
-const TransactionForm = () => {
+interface Props {
+  onComplete?: () => void;
+}
+
+const TransactionForm = ({ onComplete }: Props) => {
   const {
     addTransaction,
     editTransaction,
@@ -80,7 +83,7 @@ const TransactionForm = () => {
         date: new Date(currentEditTransaction.date),
         description: currentEditTransaction.description,
         isExpense: currentEditTransaction.isExpense,
-        category: currentEditTransaction.category || "",
+        category: currentEditTransaction.category,
       });
     } else {
       // When not editing, reset to defaults
@@ -105,6 +108,8 @@ const TransactionForm = () => {
       toast.success("Transaction added");
     }
 
+    onComplete?.();
+
     // Reset form
     form.reset({
       amount: 0,
@@ -115,193 +120,159 @@ const TransactionForm = () => {
     });
   };
 
-  const handleCancel = () => {
-    setIsEditing(null);
-    form.reset({
-      amount: 0,
-      date: new Date(),
-      description: "",
-      isExpense: true,
-      category: "",
-    });
-  };
-
   return (
-    <Card className="bg-white shadow-md">
-      <CardHeader>
-        <CardTitle>
-          {isEditing ? "Edit Transaction" : "Add Transaction"}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="isExpense"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel>Transaction Type</FormLabel>
-                  <FormControl>
-                    <ToggleGroup
-                      type="single"
-                      value={field.value ? "expense" : "income"}
-                      onValueChange={(value) => {
-                        if (value) {
-                          field.onChange(value === "expense");
-                          // Reset category when transaction type changes
-                          form.setValue("category", "");
-                        }
-                      }}
-                      className="justify-start rounded-md border p-1"
-                    >
-                      <ToggleGroupItem
-                        value="expense"
-                        className="flex items-center gap-1 data-[state=on]:bg-red-100 data-[state=on]:text-red-600"
-                      >
-                        <Minus className="h-4 w-4" />
-                        Expense
-                      </ToggleGroupItem>
-                      <ToggleGroupItem
-                        value="income"
-                        className="flex items-center gap-1 data-[state=on]:bg-green-100 data-[state=on]:text-green-600"
-                      >
-                        <Plus className="h-4 w-4" />
-                        Income
-                      </ToggleGroupItem>
-                    </ToggleGroup>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      step="0.01"
-                      min="0"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter transaction description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex gap-2">
-              {isEditing && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={handleCancel}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="isExpense"
+          render={({ field }) => (
+            <FormItem className="space-y-1">
+              <FormLabel>Transaction Type</FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  type="single"
+                  value={field.value ? "expense" : "income"}
+                  onValueChange={(value) => {
+                    if (value) {
+                      field.onChange(value === "expense");
+                      // Reset category when transaction type changes
+                      form.setValue("category", "");
+                    }
+                  }}
+                  className="justify-start rounded-md border p-1"
                 >
-                  Cancel
-                </Button>
-              )}
-              <Button type="submit" className={isEditing ? "flex-1" : "w-full"}>
-                {isEditing ? "Update Transaction" : "Add Transaction"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                  <ToggleGroupItem
+                    value="expense"
+                    className="flex items-center gap-1 data-[state=on]:bg-red-100 data-[state=on]:text-red-600"
+                  >
+                    <Minus className="h-4 w-4" />
+                    Expense
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="income"
+                    className="flex items-center gap-1 data-[state=on]:bg-green-100 data-[state=on]:text-green-600"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Income
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter transaction description"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex items-center gap-4">
+          <Button type="submit" className={isEditing ? "flex-1" : "w-full"}>
+            {isEditing ? "Update Transaction" : "Add Transaction"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };
 
