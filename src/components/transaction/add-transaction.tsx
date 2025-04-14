@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 import TransactionForm from "./transaction-form";
 
@@ -15,25 +16,20 @@ const AddTransaction = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <>
-      <Button onClick={() => setIsDialogOpen(true)}>Add Transaction</Button>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Add Transaction</DialogTitle>
-            <DialogDescription>
-              Add the details of your transaction
-            </DialogDescription>
-          </DialogHeader>
-          <TransactionForm
-            onComplete={() => {
-              setIsDialogOpen(false);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger asChild>
+        <Button className="mt-4 md:mt-0">Add Transaction</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add New Transaction</DialogTitle>
+          <DialogDescription>
+            Enter the details of your transaction
+          </DialogDescription>
+        </DialogHeader>
+        <TransactionForm onComplete={() => setIsDialogOpen(false)} />
+      </DialogContent>
+    </Dialog>
   );
 };
 

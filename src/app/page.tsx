@@ -21,18 +21,19 @@ export default function HomePage() {
           <Header />
 
           <Tabs defaultValue="dashboard" className="mb-8">
-            <TabsList className="mb-6">
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="transactions">Transactions</TabsTrigger>
-              <TabsTrigger value="budgets">Budget Management</TabsTrigger>
-            </TabsList>
+            <div className="flex justify-between">
+              <TabsList className="mb-6">
+                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+                <TabsTrigger value="transactions">Transactions</TabsTrigger>
+                <TabsTrigger value="budgets">Budget Management</TabsTrigger>
+              </TabsList>
+
+              <AddTransaction />
+            </div>
 
             <TabsContent value="dashboard">
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-1">
-                  <AddTransaction />
-                </div>
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-3">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <RecentTransactions />
                     <CategoryBreakdown />

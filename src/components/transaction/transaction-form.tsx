@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, Minus, Plus } from "lucide-react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -62,40 +61,23 @@ const TransactionForm = ({ onComplete }: Props) => {
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
-      amount: 0,
-      date: new Date(),
-      description: "",
-      isExpense: true,
-      category: "",
+      amount: currentEditTransaction?.amount ?? 0,
+      description: currentEditTransaction?.description ?? "",
+      date: currentEditTransaction?.date
+        ? new Date(currentEditTransaction.date)
+        : new Date(),
+      isExpense: currentEditTransaction?.isExpense ?? true,
+      category:
+        currentEditTransaction?.category ??
+        (currentEditTransaction?.isExpense
+          ? EXPENSE_CATEGORIES[0]
+          : INCOME_CATEGORIES[0]),
     },
   });
 
   // Watch for expense type to update available categories
   const isExpense = form.watch("isExpense");
   const categories = isExpense ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
-
-  // Reset form when transaction changes or editing is cancelled
-  useEffect(() => {
-    if (isEditing && currentEditTransaction) {
-      // When editing, populate form with current transaction
-      form.reset({
-        amount: currentEditTransaction.amount,
-        date: new Date(currentEditTransaction.date),
-        description: currentEditTransaction.description,
-        isExpense: currentEditTransaction.isExpense,
-        category: currentEditTransaction.category,
-      });
-    } else {
-      // When not editing, reset to defaults
-      form.reset({
-        amount: 0,
-        date: new Date(),
-        description: "",
-        isExpense: true,
-        category: "",
-      });
-    }
-  }, [isEditing, currentEditTransaction, form]);
 
   const onSubmit = (data: TransactionFormData) => {
     if (isEditing && currentEditTransaction) {
@@ -168,7 +150,7 @@ const TransactionForm = ({ onComplete }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a category" />
@@ -196,8 +178,8 @@ const TransactionForm = ({ onComplete }: Props) => {
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="0.00"
-                  step="0.01"
+                  placeholder="0"
+                  step="10"
                   min="0"
                   {...field}
                 />
@@ -219,7 +201,7 @@ const TransactionForm = ({ onComplete }: Props) => {
                     <Button
                       variant="outline"
                       className={cn(
-                        "pl-3 text-left font-normal",
+                        "cursor-pointer pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground",
                       )}
                     >
@@ -266,9 +248,12 @@ const TransactionForm = ({ onComplete }: Props) => {
           )}
         />
 
-        <div className="flex items-center gap-4">
-          <Button type="submit" className={isEditing ? "flex-1" : "w-full"}>
-            {isEditing ? "Update Transaction" : "Add Transaction"}
+        <div className="flex justify-end space-x-2">
+          <Button type="button" variant="outline" onClick={onComplete}>
+            Cancel
+          </Button>
+          <Button type="submit">
+            {isEditing ? "Update" : "Add"} Transaction
           </Button>
         </div>
       </form>
