@@ -1,6 +1,7 @@
 "use client";
 
 import CategoryBreakdown from "@/components/category/category-breakdown";
+import ExpensesChart from "@/components/charts/expenses-chart";
 import Header from "@/components/header";
 import RecentTransactions from "@/components/transaction/recent-transactions";
 import TransactionForm from "@/components/transaction/transaction-form";
@@ -35,7 +36,7 @@ export default function HomePage() {
               </div>
 
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {/* <ExpensesChart /> */}
+                <ExpensesChart />
                 {/* <CategoryPieChart /> */}
               </div>
 

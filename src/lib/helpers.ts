@@ -39,3 +39,33 @@ export const formatDate = (date: Date): string => {
   }
   return format(date, "MMM dd, yyyy");
 };
+
+// Group transactions by month for the chart
+export const groupTransactionsByMonth = (transactions: Transaction[]) => {
+  const expensesByMonth: Record<string, number> = {};
+
+  transactions.forEach((transaction) => {
+    if (transaction.isExpense) {
+      const date = new Date(transaction.date);
+      const monthKey = format(date, "MMM yyyy");
+
+      expensesByMonth[monthKey] ??= 0;
+      expensesByMonth[monthKey] += transaction.amount;
+    }
+  });
+
+  // Convert to array for recharts
+  return Object.entries(expensesByMonth)
+    .map(([month, amount]) => ({
+      month,
+      amount,
+    }))
+    .sort((a, b) => {
+      // Sort by date (recent months first)
+      const dateA = new Date(a.month);
+      const dateB = new Date(b.month);
+      return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, 6)
+    .reverse(); // Get last 6 months and make chronological
+};
