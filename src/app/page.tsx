@@ -5,6 +5,7 @@ import BudgetManager from "@/components/budget/budget-manager";
 import CategoryBreakdown from "@/components/category/category-breakdown";
 import CategoryPieChart from "@/components/category/category-pie-chart";
 import ExpensesChart from "@/components/expenses/expenses-chart";
+import SpendingInsights from "@/components/expenses/spending-insignts";
 import Header from "@/components/header";
 import AddTransaction from "@/components/transaction/add-transaction";
 import RecentTransactions from "@/components/transaction/recent-transactions";
@@ -46,7 +47,7 @@ export default function HomePage() {
 
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <BudgetComparisonChart />
-                {/* <SpendingInsights /> */}
+                <SpendingInsights />
               </div>
             </TabsContent>
 
@@ -57,7 +58,7 @@ export default function HomePage() {
             <TabsContent value="budgets">
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <BudgetManager />
-                {/* <SpendingInsights /> */}
+                <SpendingInsights />
               </div>
 
               <div className="grid grid-cols-1 gap-6">
