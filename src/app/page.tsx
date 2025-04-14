@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/header";
+import TransactionForm from "@/components/transaction/transaction-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TransactionProvider } from "@/contexts/transaction-context";
 
@@ -20,7 +21,9 @@ export default function HomePage() {
 
             <TabsContent value="dashboard">
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-1">{/* <TransactionForm /> */}</div>
+                <div className="lg:col-span-1">
+                  <TransactionForm />
+                </div>
                 <div className="lg:col-span-2">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     {/* <RecentTransactions /> */}
