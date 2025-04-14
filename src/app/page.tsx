@@ -1,5 +1,6 @@
 "use client";
 
+import CategoryBreakdown from "@/components/category/category-breakdown";
 import Header from "@/components/header";
 import RecentTransactions from "@/components/transaction/recent-transactions";
 import TransactionForm from "@/components/transaction/transaction-form";
@@ -28,7 +29,7 @@ export default function HomePage() {
                 <div className="lg:col-span-2">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <RecentTransactions />
-                    {/* <CategoryBreakdown /> */}
+                    <CategoryBreakdown />
                   </div>
                 </div>
               </div>
