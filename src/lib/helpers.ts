@@ -69,3 +69,54 @@ export const groupTransactionsByMonth = (transactions: Transaction[]) => {
     .slice(0, 6)
     .reverse(); // Get last 6 months and make chronological
 };
+
+// Get current month's expenses by category
+export const getCurrentMonthExpensesByCategory = (
+  transactions: Transaction[],
+) => {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  const expensesByCategory: Record<string, number> = {};
+
+  transactions.forEach((transaction) => {
+    const transactionDate = new Date(transaction.date);
+    const isCurrentMonth =
+      transactionDate.getMonth() === currentMonth &&
+      transactionDate.getFullYear() === currentYear;
+
+    if (transaction.isExpense && isCurrentMonth && transaction.category) {
+      expensesByCategory[transaction.category] ??= 0;
+      expensesByCategory[transaction.category]! += transaction.amount;
+    }
+  });
+
+  return expensesByCategory;
+};
+
+// Compare budget vs actual spending
+export const compareBudgetVsActual = (
+  transactions: Transaction[],
+  budgets: Record<string, number>,
+) => {
+  const currentMonthExpenses = getCurrentMonthExpensesByCategory(transactions);
+
+  // Create comparison data for chart
+  return Object.entries(budgets)
+    .map(([category, budgetAmount]) => {
+      const spent = currentMonthExpenses[category] ?? 0;
+      const remaining = Math.max(0, budgetAmount - spent);
+      const percentSpent = budgetAmount > 0 ? (spent / budgetAmount) * 100 : 0;
+
+      return {
+        category,
+        budget: budgetAmount,
+        spent,
+        remaining,
+        percentSpent: Math.min(percentSpent, 100), // Cap at 100%
+        overBudget: spent > budgetAmount,
+      };
+    })
+    .sort((a, b) => b.percentSpent - a.percentSpent); // Sort by percentage spent
+};

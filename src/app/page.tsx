@@ -1,5 +1,6 @@
 "use client";
 
+import BudgetComparisonChart from "@/components/budget/budget-comparison-chart";
 import BudgetManager from "@/components/budget/budget-manager";
 import CategoryBreakdown from "@/components/category/category-breakdown";
 import CategoryPieChart from "@/components/category/category-pie-chart";
@@ -44,7 +45,7 @@ export default function HomePage() {
               </div>
 
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {/* <BudgetComparisonChart /> */}
+                <BudgetComparisonChart />
                 {/* <SpendingInsights /> */}
               </div>
             </TabsContent>
@@ -60,7 +61,7 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 gap-6">
-                {/* <BudgetComparisonChart /> */}
+                <BudgetComparisonChart />
               </div>
             </TabsContent>
           </Tabs>
